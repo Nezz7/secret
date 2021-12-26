@@ -2,9 +2,8 @@ package cobra
 
 import (
 	"fmt"
-
-	"github.com/gophercises/secret"
 	"github.com/spf13/cobra"
+	"secret"
 )
 
 var setCmd = &cobra.Command{
@@ -15,9 +14,10 @@ var setCmd = &cobra.Command{
 		key, value := args[0], args[1]
 		err := v.Set(key, value)
 		if err != nil {
-			panic(err)
+			fmt.Println(err)
+			return
 		}
-		fmt.Println("Value set successfully!")
+		fmt.Printf("%s set successfully!\n", key)
 	},
 }
 

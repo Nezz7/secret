@@ -1,6 +1,6 @@
 package main
 
-import "github.com/gophercises/secret/cmd/cobra"
+import "secret/cmd/cobra"
 
 func main() {
 	cobra.RootCmd.Execute()

@@ -7,7 +7,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/gophercises/secret/cipher"
+	"secret/cipher"
 )
 
 func File(encodingKey, filepath string) *Vault {
@@ -85,4 +85,36 @@ func (v *Vault) Set(key, value string) error {
 	v.keyValues[key] = value
 	err = v.save()
 	return err
+}
+
+func (v *Vault) Delete(key string) error {
+	v.mutex.Lock()
+	defer v.mutex.Unlock()
+	err := v.load()
+	if err != nil {
+		return err
+	}
+	_, ok := v.keyValues[key]
+	if !ok {
+		return errors.New("secret: no value for that key")
+	}
+	delete(v.keyValues, key)
+	err = v.save()
+	return err
+}
+
+func (v *Vault) List() ([]string, error) {
+	v.mutex.Lock()
+	defer v.mutex.Unlock()
+	err := v.load()
+	if err != nil {
+		return nil, err
+	}
+	keys := make([]string, len(v.keyValues))
+	i := 0
+	for k := range v.keyValues {
+		keys[i] = k
+		i++
+	}
+	return keys, nil
 }
